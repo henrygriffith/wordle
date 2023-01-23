@@ -52,11 +52,23 @@ body {
     border-color: hsl(200, 1%, 34%);
 }
 
-/* .tile.wrong {}
+.tile[data-state="wrong"] {
+    border: none;
 
-.tile.wrong-pos {}
+    background-color: hsl(240, 2%, 23%);
+}
 
-.tile.correct {} */
+.tile[data-state="wrong-pos"] {
+    border: none;
+
+    background-color: hsl(49, 51%, 47%);
+}
+
+.tile[data-state="correct"] {
+    border: none;
+
+    background-color: hsl(115, 29%, 43%);
+}
 
 #keyboard {
     display: grid;
