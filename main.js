@@ -71,13 +71,48 @@ function deleteKey() {
 }
 
 function getActiveTiles() {
-   const tiles = document.querySelectorAll('[data-state="active"]');
-   return tiles
+   return document.querySelectorAll('[data-state="active"]');
 }
 
 function submitGuess() {
+   const tiles = getActiveTiles();
+   // reduce better here
+   const guess = [...tiles].map((tile) => tile.dataset.letter).join('').toUpperCase();
+   if (guess.length !== WORD_LENGTH) {
+      // shakeLetters(tiles);
+      showShortAlert();
+      return;
+   }
 
+   if (guess === targetWord) {
+      assessGuess(tiles, guess);
+      showWinScreen();
+   }
+   if (guess !== targetWord) {
+      assessGuess(tiles, guess);
+   }
 }
+
+function showShortAlert() {
+   alert("NOT ENOUGH LETTERS")
+}
+
+function shakeLetters(tiles) {
+   tiles.forEach((tile) => tile.classList.add('shake'))
+}
+
+function assessGuess(tiles, guess) {
+   for (let i = 0; i < guess.length; i++) {
+      if (guess[i] === targetWord[i]) tiles[i].dataset.state = "correct"
+      else if (guess[i] !== targetWord[i] && targetWord.includes(guess[i])) tiles[i].dataset.state = "wrong-pos"
+      else tiles[i].dataset.state = "wrong"
+   }
+}
+function showWinScreen() {
+   alert("YOU WIN!")
+}
+
+
 
 
 
