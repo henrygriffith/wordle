@@ -1,11 +1,16 @@
-// current tile is the active tile. Upon typing a valid key, change innerHTML.
+import {allFiveLetterWords} from './dictionary.js'
 const tileArea = document.getElementById('play-area')
 const WORD_LENGTH = 5;
-const targetWord = "CLIMB"
+let targetWord = allFiveLetterWords[Math.floor(Math.random() * allFiveLetterWords.length - 1)]
+console.log(targetWord, typeof targetWord)
+
+
 
 function initializeGame() {
    document.addEventListener('click', handleClick)
    document.addEventListener('keydown', handleKeyPress)
+   console.log(allFiveLetterWords)
+
 }
 
 function pauseInteraction() {
@@ -77,13 +82,20 @@ function getActiveTiles() {
 function submitGuess() {
    const tiles = getActiveTiles();
    // reduce better here
-   const guess = [...tiles].map((tile) => tile.dataset.letter).join('').toUpperCase();
+   const guess = [...tiles].map((tile) => tile.dataset.letter).join('');
+
    if (guess.length !== WORD_LENGTH) {
       // shakeLetters(tiles);
       showShortAlert();
+      deactivateTiles(tiles)
       return;
    }
-
+   if (!allFiveLetterWords.includes(guess)) {
+      rejectWord();
+      deactivateTiles(tiles)
+      return;
+   }
+   
    if (guess === targetWord) {
       assessGuess(tiles, guess);
       showWinScreen();
@@ -93,8 +105,19 @@ function submitGuess() {
    }
 }
 
+function deactivateTiles(tiles) {
+   tiles.forEach((tile) => {
+      tile.textContent = ""
+      delete tile.dataset.letter
+      delete tile.dataset.state
+   })
+}
+
 function showShortAlert() {
    alert("NOT ENOUGH LETTERS")
+}
+function rejectWord() {
+   alert("NOT A WORD")
 }
 
 function shakeLetters(tiles) {
